@@ -67,7 +67,7 @@ public class ResponseHandler {
 		map.put("TimeStamp", new Timestamp(new Date().getTime()).toString());
 		map.put("URI",uri.getPath());
 		map.put("Result", "Product Price has been updated");
-		ResponseEntity<Object> res = new ResponseEntity<Object>(map,HttpStatus.INTERNAL_SERVER_ERROR);
+		ResponseEntity<Object> res = new ResponseEntity<Object>(map,HttpStatus.OK);
 		
 		return res;
 	}
