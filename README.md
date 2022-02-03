@@ -31,7 +31,7 @@ Maven: https://maven.apache.org/
 
 Postman: https://www.postman.com/
 
-**Set up instruction**
+**Set up instructions**
 
 In Eclipse or any other development IDE for java, Import as Maven Project, either build manually or by default auto build is enabled. I have used spring boot application, when the maven build is done, simply run as Java Application on the main class. 
 
@@ -39,7 +39,7 @@ Download & install MongoDB community edition & compass on local machine. Start M
 
 Update api end point, api key name & value in application.properties file in Java project.
 
-**Start Application**
+**Getting Started**
 
 
 1) Run Java Application from IDE.
@@ -85,7 +85,7 @@ Update api end point, api key name & value in application.properties file in Jav
         
         <img width="665" alt="PUTFailure" src="https://user-images.githubusercontent.com/96628061/152416660-ec705745-67c2-4b0c-8e4c-832d30d8609d.png">
 
-        If proct value not sent, API sends 406 response
+        If product value is not sent in body, API sends 406 response.
         
         <img width="670" alt="PutFailureEmpty" src="https://user-images.githubusercontent.com/96628061/152417478-cc8e3251-64e3-4886-a8ca-88c8eb2cb7fa.png">
 
