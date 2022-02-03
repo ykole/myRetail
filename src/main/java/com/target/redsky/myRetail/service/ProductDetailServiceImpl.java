@@ -18,6 +18,9 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.target.redsky.myRetail.entity.*;
+import com.target.redsky.myRetail.exception.ExternalAPIException;
+import com.target.redsky.myRetail.exception.ProductDetailsNotFound;
+import com.target.redsky.myRetail.exception.ProductPriceNotFound;
 import com.target.redsky.myRetail.dto.*;
 import com.target.redsky.myRetail.repository.ProductPriceRepository;
 
@@ -57,18 +60,18 @@ public class ProductDetailServiceImpl implements ProductDetailService {
 		{
 			return "";
 		}
-		try
-		{	
+			
 		    HttpHeaders headers = new HttpHeaders();
 		     // headers.set(apiEndPointKeyName, apiEndPointKeyValue);		     
 		    headers.setContentType(MediaType.APPLICATION_JSON);		      
 		    UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(apiEndPoint).queryParam(apiEndPointKeyName.toString(),apiEndPointKeyValue.toString()).queryParam("tcin", id);		
 		      
-			
+		    try
+			{
 			HttpEntity<String> httpEntity = new HttpEntity<String>(apiEndPoint, headers);
-		    ResponseEntity<String> response = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, httpEntity,
-		          String.class);
-			
+		    ResponseEntity<String> response = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, httpEntity,String.class);
+		    
+		    			
 		    if (response.getStatusCode() == HttpStatus.OK)
 		    {
 				Map<String, Map> resultMap = objectMapper.readValue(response.getBody(), Map.class);
@@ -91,16 +94,18 @@ public class ProductDetailServiceImpl implements ProductDetailService {
 					}
 				}				
 		    }
+		  
 		    else
-		    {
-		    	return "";
+		    {		    
+		    	throw new ExternalAPIException("Exception while retrieving data through third party API for Product "+id);
 		    }
 					
 		
 		}
 		catch(Exception e)
 		{			
-			e.printStackTrace();
+			
+			throw new ExternalAPIException("Exception while retrieving data through third party API for Product "+id);
 		}
 	
 		return "";
@@ -110,10 +115,11 @@ public class ProductDetailServiceImpl implements ProductDetailService {
 		public ProductPriceDetails getProductbyID(long id) 
 		{
 			
-			ProductPrice price = productPriceRepository.findById(id);
-			String productName = getProductName(id);
-						
 			
+			String productName = getProductName(id);
+			ProductPrice price = productPriceRepository.findById(id).orElseThrow(() ->new ProductPriceNotFound("Product Price not found in database for " +String.valueOf(id)));
+			
+					
 			if (price != null && (!productName.trim().equals("")))
 			{
 				return new  ProductPriceDetails(price.getId(),productName, new ProductPriceDTO(price.getCost(),price.getCurrencyCode()));				
@@ -130,7 +136,7 @@ public class ProductDetailServiceImpl implements ProductDetailService {
 		public boolean updateProductPrice(ProductPriceDetails priceDetails) 
 		{
 			
-		   ProductPrice currentPrice = productPriceRepository.findById(priceDetails.getProductId());
+		   ProductPrice currentPrice = productPriceRepository.findById(priceDetails.getProductId()).orElseThrow(() ->new ProductPriceNotFound("Product Price not found in database for " +String.valueOf(priceDetails.getProductId())));
 		   if (currentPrice != null)
 		   {
 			   currentPrice.setCost(priceDetails.getProductPrice().getValue());

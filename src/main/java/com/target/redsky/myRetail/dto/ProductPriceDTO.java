@@ -2,6 +2,7 @@ package com.target.redsky.myRetail.dto;
 
 import java.math.BigDecimal;
 
+import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -17,10 +18,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class ProductPriceDTO {
 
-	@NotNull
-	@Positive
-	@NotBlank
-	@NotEmpty
+	//@NotNull
+	//@DecimalMin(value = "0.0", inclusive = false)
+	@JsonProperty("value")
 	private BigDecimal value;
 	
 	@JsonProperty("currency_code")

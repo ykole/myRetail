@@ -15,8 +15,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class ProductPriceDetails {
 	
 	@JsonProperty("id")
-	@NotNull
-	@NotBlank
 	private long productId;
 	
 	@JsonProperty("name")
@@ -25,7 +23,6 @@ public class ProductPriceDetails {
 	@JsonProperty("current_price")
 	private ProductPriceDTO productPrice;
 
-	
 	
 	
 	public long getProductId() {

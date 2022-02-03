@@ -30,6 +30,16 @@ public class ResponseHandler {
 		return res;
 	}
 	
+	public static ResponseEntity<Object> sendFailurePriceUpdateError(String error)
+	{
+		Map<String,Object> map= new HashMap<String, Object>();	
+		map.put("TimeStamp", new Timestamp(new Date().getTime()).toString());
+		map.put("Error",error);
+		ResponseEntity<Object> res = new ResponseEntity<Object>(map,HttpStatus.NOT_ACCEPTABLE);
+		
+		return res;
+	}
+	
 	public static ResponseEntity<Object> sendProductNotFound(long id)
 	{
 		Map<String,Object> map= new HashMap<String, Object>();	
@@ -39,5 +49,28 @@ public class ResponseHandler {
 		
 		return res;
 	}
+	
+	public static ResponseEntity<Object> sendMethodArgumentException(String message)
+	{
+		Map<String,Object> map= new HashMap<String, Object>();	
+		map.put("TimeStamp", new Timestamp(new Date().getTime()).toString());
+		map.put("Error",message);
+		ResponseEntity<Object> res = new ResponseEntity<Object>(map,HttpStatus.INTERNAL_SERVER_ERROR);
+		
+		return res;
+	}
+	
+
+	public static ResponseEntity<Object> sendUpdateSuccess(URI uri)
+	{
+		Map<String,Object> map= new HashMap<String, Object>();	
+		map.put("TimeStamp", new Timestamp(new Date().getTime()).toString());
+		map.put("URI",uri.getPath());
+		map.put("Result", "Product Price has been updated");
+		ResponseEntity<Object> res = new ResponseEntity<Object>(map,HttpStatus.INTERNAL_SERVER_ERROR);
+		
+		return res;
+	}
+
 
 }
