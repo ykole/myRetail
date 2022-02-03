@@ -3,6 +3,11 @@ package com.target.redsky.myRetail.util;
 import com.target.redsky.myRetail.dto.ProductPriceDTO;
 import com.target.redsky.myRetail.dto.ProductPriceDetails;
 
+/**
+ * @author Prashant Vaikole
+ *
+ */
+
 public class CustomValidation {
 	
 	public static String validateProductPriceDTO(ProductPriceDetails product)

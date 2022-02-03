@@ -3,6 +3,11 @@ package com.target.redsky.myRetail.exception;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * @author Prashant Vaikole
+ *
+ */
+
 public class ErrorResponse {
 	private Date timestamp;
 	private String message;
