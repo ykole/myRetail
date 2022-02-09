@@ -13,9 +13,13 @@ import com.target.redsky.myRetail.dto.*;
 
 public interface ProductDetailService {
 
-	public String getProductName(long id) ;
+	public boolean checkHealthDB(long id);
+	
+	//public String getProductName(long id) ;
 	
 	public ProductPriceDetails getProductbyID(long id);
+	
+	//public ProductPriceDetails getProductbyIDService(long id);
 	
 	public boolean updateProductPrice(ProductPriceDetails priceDetails);
 	

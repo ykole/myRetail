@@ -51,12 +51,31 @@ public class ProductController {
 	@PostMapping("/products/")
 	public ResponseEntity<Object> addProductPrice(@RequestBody ProductPriceDetails price)
 	{		
-		ProductPrice newProductPrice=new ProductPrice();
-		newProductPrice.setId(price.getProductId());
-		newProductPrice.setCost(price.getProductPrice().getValue());
-		newProductPrice.setCurrencyCode(price.getProductPrice().getCurrencyCode());
-		newProductPrice = productPriceRepository.save(newProductPrice);
-		return ResponseEntity.ok().body(newProductPrice.toString());
+		try
+		{
+			
+			String error = CustomValidation.validateProductPriceDTO(price);
+			
+			if (error.trim().length()>0)
+			{
+				return ResponseHandler.sendFailurePriceUpdateError(error);
+			}
+			
+			ProductPrice newProductPrice=new ProductPrice();
+			newProductPrice.setId(price.getProductId());
+			newProductPrice.setCost(price.getProductPrice().getValue());
+			newProductPrice.setCurrencyCode(price.getProductPrice().getCurrencyCode());
+			newProductPrice = productPriceRepository.save(newProductPrice);
+			URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                    .path("/{id}")
+                    .buildAndExpand(newProductPrice.getId())
+                    .toUri();
+			return ResponseEntity.created(location).build();
+		}
+		catch(Exception e)
+		{
+			return ResponseEntity.internalServerError().build();
+		}
 	}
 	
 	
@@ -64,6 +83,7 @@ public class ProductController {
 	public ResponseEntity<Object> getProductDetailsByID(@PathVariable long id) 
 	{		
 		
+		//ProductPriceDetails product = productDetailService.getProductbyID(id);
 		ProductPriceDetails product = productDetailService.getProductbyID(id);
 		if(product != null)
 		{

@@ -22,5 +22,7 @@ public interface ProductPriceRepository extends MongoRepository<ProductPrice, Lo
 	
 	Optional<ProductPrice>  findById(long id);
 	
+	
+	
 		
 }

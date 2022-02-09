@@ -52,7 +52,90 @@ public class ProductDetailServiceImpl implements ProductDetailService {
 	@Autowired
 	ProductPriceRepository productPriceRepository;
 	
+	@Autowired
+	APIService apiService;
 	
+	
+	
+	
+	@Override
+	public boolean updateProductPrice(ProductPriceDetails priceDetails) 
+	{
+		
+	   ProductPrice currentPrice = productPriceRepository.findById(priceDetails.getProductId()).orElseThrow(() ->new ProductPriceNotFound("Product Price not found in database for " +String.valueOf(priceDetails.getProductId())));
+	   if (currentPrice != null)
+	   {
+		   currentPrice.setCost(priceDetails.getProductPrice().getValue());
+		   currentPrice.setCurrencyCode(priceDetails.getProductPrice().getCurrencyCode());
+		   productPriceRepository.save(currentPrice);
+		   return true;
+	   }
+	   else
+	   {
+		   return false;
+	   }
+	   
+		
+	}
+	
+
+	
+	@Override
+	public ProductPriceDetails getProductbyID(long id) 
+	{
+				
+		String productName = apiService.getProductName(id);
+		ProductPrice price = productPriceRepository.findById(id).orElseThrow(() ->new ProductPriceNotFound("Product Price not found in database for " +String.valueOf(id)));
+							
+		if (price != null && (!productName.trim().equals("")))
+		{
+			return new  ProductPriceDetails(price.getId(),productName, new ProductPriceDTO(price.getCost(),price.getCurrencyCode()));				
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	
+	public boolean checkHealthDB(long id)
+	{
+		try
+		{
+			ProductPrice price = productPriceRepository.findById(id).orElse(null);
+			return true;
+		}
+		catch(Exception e)
+		{
+			return false;
+		}
+					
+	}
+	
+	/*
+	@Override
+	public ProductPriceDetails getProductbyID(long id) 
+	{
+		
+		
+		String productName = getProductName(id);
+		ProductPrice price = productPriceRepository.findById(id).orElseThrow(() ->new ProductPriceNotFound("Product Price not found in database for " +String.valueOf(id)));
+		
+				
+		if (price != null && (!productName.trim().equals("")))
+		{
+			return new  ProductPriceDetails(price.getId(),productName, new ProductPriceDTO(price.getCost(),price.getCurrencyCode()));				
+		}
+		else
+		{
+			return null;
+		}		
+		
+		
+	}*/
+	
+	
+	/*
 	public String getProductName(long id)
 	{
 		
@@ -110,49 +193,9 @@ public class ProductDetailServiceImpl implements ProductDetailService {
 	
 		return "";
 		
-	}
-	
-		public ProductPriceDetails getProductbyID(long id) 
-		{
-			
-			
-			String productName = getProductName(id);
-			ProductPrice price = productPriceRepository.findById(id).orElseThrow(() ->new ProductPriceNotFound("Product Price not found in database for " +String.valueOf(id)));
-			
-					
-			if (price != null && (!productName.trim().equals("")))
-			{
-				return new  ProductPriceDetails(price.getId(),productName, new ProductPriceDTO(price.getCost(),price.getCurrencyCode()));				
-			}
-			else
-			{
-				return null;
-			}		
-			
-			
-		}
+	}*/
 		
 		
-		public boolean updateProductPrice(ProductPriceDetails priceDetails) 
-		{
-			
-		   ProductPrice currentPrice = productPriceRepository.findById(priceDetails.getProductId()).orElseThrow(() ->new ProductPriceNotFound("Product Price not found in database for " +String.valueOf(priceDetails.getProductId())));
-		   if (currentPrice != null)
-		   {
-			   currentPrice.setCost(priceDetails.getProductPrice().getValue());
-			   currentPrice.setCurrencyCode(priceDetails.getProductPrice().getCurrencyCode());
-			   productPriceRepository.save(currentPrice);
-			   return true;
-		   }
-		   else
-		   {
-			   return false;
-		   }
-		   
-			
-		}
-		
-	
 	
 
 }
